@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
   :root {
     --navy: #202c4e;
@@ -406,6 +407,16 @@
     margin-top: 2px;
   }
 
+  /* MULTI-SELECT (checkbox style) */
+  .options.multi .opt-radio {
+    border-radius: 4px;
+  }
+  .options.multi .opt-dot {
+    width: 10px; height: 10px; border-radius: 2px;
+    background: var(--white);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
   @media (max-width: 520px) {
     .hero h1 { font-size: 28px; }
     .q-text { font-size: 26px; }
@@ -687,9 +698,9 @@
 
   <div class="screen" data-screen="7">
     <div class="q-number">Question 07 of 07</div>
-    <h2 class="q-text">What is your primary search priority?</h2>
-    <p class="q-helper">The single factor that matters most when identifying which streets and suburbs fit your brief.</p>
-    <div class="options" data-q="priority">
+    <h2 class="q-text">What are your search priorities?</h2>
+    <p class="q-helper">Select all that apply. These factors guide which streets and suburbs make your shortlist.</p>
+    <div class="options multi" data-q="priority">
       <div class="opt" data-v="school" data-sc="3">
         <div class="opt-radio"><div class="opt-dot"></div></div>
         <div class="opt-body">
@@ -803,11 +814,27 @@ const total = 7;
 
 document.querySelectorAll('.opt').forEach(card => {
   card.addEventListener('click', function() {
-    this.closest('.options').querySelectorAll('.opt').forEach(c => c.classList.remove('selected'));
-    this.classList.add('selected');
-    ans[this.closest('.options').dataset.q] = { v: this.dataset.v, s: +this.dataset.sc };
-    const btn = this.closest('.screen').querySelector('.btn-next');
-    if (btn) { btn.classList.remove('disabled'); btn.classList.add('primary'); }
+    const group = this.closest('.options');
+    const q = group.dataset.q;
+    if (group.classList.contains('multi')) {
+      this.classList.toggle('selected');
+      const selected = [...group.querySelectorAll('.opt.selected')];
+      ans[q] = {
+        v: selected.map(c => c.dataset.v),
+        s: selected.length > 0 ? Math.max(...selected.map(c => +c.dataset.sc)) : 0
+      };
+      const btn = this.closest('.screen').querySelector('.btn-next');
+      if (btn) {
+        if (selected.length > 0) { btn.classList.remove('disabled'); btn.classList.add('primary'); }
+        else { btn.classList.add('disabled'); btn.classList.remove('primary'); }
+      }
+    } else {
+      group.querySelectorAll('.opt').forEach(c => c.classList.remove('selected'));
+      this.classList.add('selected');
+      ans[q] = { v: this.dataset.v, s: +this.dataset.sc };
+      const btn = this.closest('.screen').querySelector('.btn-next');
+      if (btn) { btn.classList.remove('disabled'); btn.classList.add('primary'); }
+    }
   });
 });
 
@@ -916,7 +943,9 @@ function showResults() {
     const teamLabel = ans.team?.v === 'aligned' ? 'Fully aligned' : ans.team?.v === 'both' ? 'Partially aligned' : ans.team?.v === 'broker' ? 'Broker only' : 'Independent';
     const teamBadge = ans.team?.s >= 3 ? 'g' : ans.team?.s >= 2 ? 'a' : 'r';
     const teamStatus = ans.team?.s >= 3 ? 'ALIGNED' : ans.team?.s >= 2 ? 'DEVELOPING' : 'EARLY';
-    const priorityLabel = ans.priority?.v === 'school' ? 'School catchment' : ans.priority?.v === 'harbour' ? 'Harbour proximity' : ans.priority?.v === 'ferry' ? 'Ferry access' : ans.priority?.v === 'Community' ? 'Community lifestyle' : 'Heritage streetscape';
+    const priorities = Array.isArray(ans.priority?.v) ? ans.priority.v : (ans.priority?.v ? [ans.priority.v] : []);
+    const priorityNameMap = { school: 'School catchment', harbour: 'Harbour proximity', ferry: 'Ferry access', community: 'Community lifestyle', heritage: 'Heritage streetscape' };
+    const priorityLabel = priorities.map(v => priorityNameMap[v] || v).join(', ') || '—';
 
     const cards = [
       {
@@ -961,19 +990,19 @@ function showResults() {
 
     const ins = [];
 
-    if (ans.priority?.v === 'school') {
+    if (priorities.includes('school')) {
       ins.push({ i: '<i class="fa-solid fa-school"></i>', t: '<strong>Public catchment properties are among the most tightly held on the Lower North Shore.</strong> The price premium for being inside it is significant.' });
     }
-    if (ans.priority?.v === 'harbour') {
+    if (priorities.includes('harbour')) {
       ins.push({ i: '<i class="fa-solid fa-anchor"></i>', t: '<strong>Harbour proximity is the single most consistent driver of capital growth on the LNS.</strong> Many of these positions do not reach public campaigns.' });
     }
-    if (ans.priority?.v === 'ferry') {
+    if (priorities.includes('ferry')) {
       ins.push({ i: '<i class="fa-solid fa-ferry"></i>', t: '<strong>Walk-to-ferry positions carry a consistent premium.</strong> For CBD-based buyers, streets within walking distance of a wharf are the top tier.' });
     }
-    if (ans.priority?.v === 'community') {
+    if (priorities.includes('community')) {
       ins.push({ i: '<i class="fa-solid fa-mug-hot"></i>', t: '<strong>Cammeray house median is $3.88M, up 20% in the past year.</strong> Community lifestyle suburbs are the fastest moving in the corridor.' });
     }
-    if (ans.priority?.v === 'heritage') {
+    if (priorities.includes('heritage')) {
       ins.push({ i: '<i class="fa-solid fa-landmark"></i>', t: '<strong>Heritage streetscape properties see long average hold periods.</strong> Stock depth is thin, which makes independent pricing difficult.' });
     }
 
