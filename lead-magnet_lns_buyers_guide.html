@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lower North Shore Buyer's Guide — BMONEY Property</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+
+<style>
+  :root {
+    --sky: #5fc3db;
+    --ocean: #417d9a;
+    --white: #ffffff;
+    --navy: #202c4e;
+    --charcoal: #414141;
+    --bg: #0e1622;
+    --bg2: #14202e;
+    --bg3: #1a2a3a;
+    --border: rgba(95,195,219,0.15);
+    --border-strong: rgba(95,195,219,0.35);
+    --text-muted: rgba(255,255,255,0.45);
+    --text-mid: rgba(255,255,255,0.72);
+    --glow: rgba(95,195,219,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--ocean); border-radius: 2px; }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* ─── LAYOUT ─── */
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ─── SIDE NAV ─── */
+  .sidenav {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 48px 32px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: linear-gradient(180deg, rgba(14,22,34,0.98) 0%, rgba(20,32,46,0.95) 100%);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+  }
+
+  .sidenav-logo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--sky);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidenav-section-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 24px;
+    margin-bottom: 4px;
+  }
+
+  .sidenav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-mid);
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    letter-spacing: 0.02em;
+  }
+
+  .sidenav a:hover {
+    color: var(--white);
+    background: var(--glow);
+    border-color: var(--border);
+  }
+
+  .sidenav a.active {
+    color: var(--sky);
+    background: rgba(95,195,219,0.08);
+    border-color: var(--border-strong);
+  }
+
+  .sidenav a .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.4;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+
+  .sidenav a.active .nav-dot { opacity: 1; }
+
+  .sidenav-progress {
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .progress-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .progress-bar-wrap {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ocean), var(--sky));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  .main {
+    padding: 64px 72px 120px 72px;
+    max-width: 920px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 64px 0 96px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 96px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sky);
+    margin-bottom: 24px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--sky);
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--white);
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--sky);
+    position: relative;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--text-mid);
+    max-width: 580px;
+    line-height: 1.8;
+    margin-bottom: 48px;
+  }
+
+  /* ─── HERO STAT STRIP ─── */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 48px;
+  }
+
+  .hero-stat {
+    background: var(--bg2);
+    padding: 24px 28px;
+    position: relative;
+  }
+
+  .hero-stat::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--sky), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .hero-stat:hover::after { opacity: 1; }
+
+  .stat-num {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--sky);
+    font-family: 'DM Mono', monospace;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ─── ANIMATED SVG HARBOUR LINE ─── */
+  .harbour-svg {
+    position: absolute;
+    right: -80px;
+    bottom: -20px;
+    width: 420px;
+    height: 200px;
+    opacity: 0.07;
+  }
+
+  /* ─── SECTION HEADERS ─── */
+  .section-block {
+    margin-bottom: 96px;
+    scroll-margin-top: 40px;
+  }
+
+  .section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--sky);
+    margin-bottom: 20px;
+  }
+
+  .section-eyebrow .num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--ocean);
+  }
+
+  .section-block h2 {
+    font-size: clamp(26px, 3.5vw, 38px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    color: var(--white);
+  }
+
+  .section-intro {
+    font-size: 15px;
+    color: var(--text-mid);
+    max-width: 640px;
+    line-height: 1.85;
+    margin-bottom: 48px;
+  }
+
+  /* ─── DIVIDER ─── */
+  .section-divider {
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--sky), transparent);
+    margin-bottom: 40px;
+  }
+
+  /* ─── CHECKLIST ─── */
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .check-category {
+    background: rgba(95,195,219,0.05);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sky);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .check-category:last-child { border-bottom: none; }
+
+  .check-item {
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    align-items: start;
+    gap: 16px;
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    background: var(--bg2);
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .check-item:hover { background: rgba(95,195,219,0.04); }
+
+  .check-item:last-child { border-bottom: none; }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .check-item.checked .check-box {
+    background: var(--sky);
+    border-color: var(--sky);
+  }
+
+  .check-box svg {
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.15s;
+  }
+
+  .check-item.checked .check-box svg {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .check-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--white);
+    line-height: 1.5;
+    transition: color 0.2s;
+  }
+
+  .check-item.checked .check-text {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--border-strong);
+  }
+
+  .check-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 3px;
+  }
+
+  .check-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .tag-critical { background: rgba(255,80,80,0.12); color: #ff8080; }
+  .tag-before { background: rgba(95,195,219,0.1); color: var(--sky); }
+  .tag-after { background: rgba(65,125,154,0.2); color: #7db5cc; }
+
+  /* ─── PROGRESS RING ─── */
+  .checklist-progress {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 48px;
+  }
+
+  .ring-wrap svg { display: block; }
+
+  .ring-track { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 4; }
+  .ring-fill {
+    fill: none;
+    stroke: var(--sky);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 100.53;
+    stroke-dashoffset: 100.53;
+    transition: stroke-dashoffset 0.5s ease;
+    transform: rotate(-90deg);
+    transform-origin: center;
+  }
+
+  .ring-text-wrap {
+    flex: 1;
+  }
+
+  .ring-count {
+    font-size: 24px;
+    font-weight: 800;
+    font-family: 'DM Mono', monospace;
+    color: var(--sky);
+    letter-spacing: -0.02em;
+  }
+
+  .ring-sublabel {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* ─── OFF-MARKET EXPLAINER ─── */
+  .offmarket-sequence {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+
+  .offmarket-card {
+    background: var(--bg2);
+    padding: 28px 24px;
+    position: relative;
+  }
+
+  .offmarket-card::before {
+    content: attr(data-num);
+    font-family: 'DM Mono', monospace;
+    font-size: 60px;
+    font-weight: 500;
+    color: rgba(95,195,219,0.06);
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    line-height: 1;
+  }
+
+  .offmarket-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--sky);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .offmarket-card p {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  .offmarket-card .badge {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border-strong);
+    color: var(--sky);
+  }
+
+  /* ─── FLOW DIAGRAM SVG ─── */
+  .flow-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin-bottom: 48px;
+    overflow: hidden;
+  }
+
+  .flow-wrap h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+  }
+
+  /* ─── SUBURB CARDS ─── */
+  .suburb-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .suburb-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+
+  .suburb-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .suburb-card.expanded { grid-column: 1 / -1; }
+
+  .suburb-header {
+    padding: 24px 24px 20px;
+    background: linear-gradient(135deg, rgba(65,125,154,0.15) 0%, transparent 60%);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .suburb-name {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--white);
+  }
+
+  .suburb-region {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ocean);
+    margin-top: 3px;
+  }
+
+  .suburb-top-stat {
+    text-align: right;
+  }
+
+  .suburb-median {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--sky);
+    letter-spacing: -0.02em;
+  }
+
+  .suburb-median-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .suburb-stats {
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+
+  .suburb-stat-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+
+  .suburb-stat-key {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .suburb-sparkline {
+    padding: 0 24px 20px;
+  }
+
+  .suburb-sparkline svg {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .sparkline-path {
+    fill: none;
+    stroke: var(--sky);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    transition: stroke-dashoffset 1.2s ease, opacity 0.3s;
+  }
+
+  .sparkline-area {
+    opacity: 0;
+    transition: opacity 0.6s 0.3s;
+  }
+
+  .suburb-card.animated .sparkline-path {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .suburb-card.animated .sparkline-area { opacity: 1; }
+
+  .suburb-note {
+    padding: 0 24px 20px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  /* ─── D3 CHART AREA ─── */
+  .chart-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 48px;
+    overflow: hidden;
+  }
+
+  .chart-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .chart-subtitle {
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+
+  .chart-wrap svg text { font-family: 'Raleway', sans-serif; }
+
+  /* ─── INSIGHT CALLOUT ─── */
+  .insight-block {
+    border-left: 2px solid var(--sky);
+    padding: 20px 24px;
+    background: rgba(95,195,219,0.04);
+    border-radius: 0 8px 8px 0;
+    margin: 32px 0;
+  }
+
+  .insight-block p {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.75;
+  }
+
+  .insight-block strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* ─── DATA TABLE ─── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 40px;
+  }
+
+  .data-table th {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .data-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-mid);
+    font-weight: 400;
+  }
+
+  .data-table td:first-child { font-weight: 600; color: var(--white); }
+
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(95,195,219,0.03); }
+
+  .data-table .mono {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--sky);
+  }
+
+  .data-table .growth-pos {
+    color: #5dde8a;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* ─── CTA SECTION ─── */
+  .cta-block {
+    background: linear-gradient(135deg, rgba(65,125,154,0.2) 0%, rgba(95,195,219,0.08) 100%);
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    padding: 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-top: 64px;
+  }
+
+  .cta-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--sky) 30%, var(--ocean) 70%, transparent);
+  }
+
+  .cta-block h3 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .cta-block p {
+    font-size: 15px;
+    color: var(--text-mid);
+    max-width: 500px;
+    margin: 0 auto 32px;
+    line-height: 1.7;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    background: var(--sky);
+    color: var(--navy);
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .cta-btn:hover {
+    background: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(95,195,219,0.3);
+  }
+
+  .cta-trust {
+    margin-top: 20px;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .cta-trust span::before {
+    content: '·';
+    margin-right: 16px;
+  }
+
+  .cta-trust span:first-child::before { display: none; }
+
+  /* ─── MICRO CTA ─── */
+  .micro-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    background: rgba(65,125,154,0.1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 48px 0;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .micro-cta:hover {
+    background: rgba(65,125,154,0.18);
+    border-color: var(--border-strong);
+  }
+
+  .micro-cta-text {
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 400;
+  }
+
+  .micro-cta-text strong {
+    display: block;
+    font-size: 15px;
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .micro-cta-arrow {
+    font-size: 20px;
+    color: var(--sky);
+    transition: transform 0.2s;
+  }
+
+  .micro-cta:hover .micro-cta-arrow { transform: translateX(4px); }
+
+  /* ─── COUNT-UP ANIMATION ─── */
+  .count-target { display: inline-block; }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ─── ANIMATED SVG FLOW ─── */
+  @keyframes flowPulse {
+    0%, 100% { stroke-dashoffset: 0; }
+    50% { stroke-dashoffset: -20; }
+  }
+
+  @keyframes dotPulse {
+    0%, 100% { r: 4; opacity: 1; }
+    50% { r: 7; opacity: 0.6; }
+  }
+
+  @keyframes lineDraw {
+    from { stroke-dashoffset: 300; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* ─── TIMELINE SVG ANIMATION ─── */
+  .timeline-animated path {
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+  }
+
+  .timeline-animated.drawn path {
+    animation: lineDraw 2s ease forwards;
+  }
+
+  /* ─── SOURCE TAG ─── */
+  .source-tag {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+    margin-top: 12px;
+    display: block;
+  }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidenav {
+      position: static;
+      height: auto;
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 4px;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidenav-logo { width: 100%; margin-bottom: 8px; padding-bottom: 8px; }
+    .sidenav-section-label { display: none; }
+    .sidenav-progress { display: none; }
+    .sidenav a { font-size: 11px; padding: 6px 10px; }
+    .main { padding: 32px 24px 80px; }
+    .hero-stats { grid-template-columns: 1fr; }
+    .offmarket-sequence { grid-template-columns: 1fr; }
+    .suburb-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .suburb-stats { grid-template-columns: 1fr 1fr; }
+    .cta-block { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDE NAV -->
+  <nav class="sidenav" id="sidenav">
+    <div class="sidenav-logo">BMONEY Property</div>
+
+    <div class="sidenav-section-label">In this guide</div>
+    <a href="#section-overview" class="active"><span class="nav-dot"></span>Overview</a>
+
+    <div class="sidenav-section-label">Section 01</div>
+    <a href="#section-diligence"><span class="nav-dot"></span>Pre-Inspection Checklist</a>
+    <a href="#section-checklist-detail"><span class="nav-dot"></span>What to check &amp; why</a>
+
+    <div class="sidenav-section-label">Section 02</div>
+    <a href="#section-offmarket"><span class="nav-dot"></span>Off-Market Explained</a>
+    <a href="#section-flow"><span class="nav-dot"></span>How access works</a>
+
+    <div class="sidenav-section-label">Section 03</div>
+    <a href="#section-suburbs"><span class="nav-dot"></span>Suburb Data</a>
+    <a href="#section-comparison"><span class="nav-dot"></span>Market Comparison</a>
+
+    <div class="sidenav-progress">
+      <div class="progress-label">Reading progress</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="readingProgress"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HERO -->
+    <section class="hero" id="section-overview">
+
+      <svg class="harbour-svg" viewBox="0 0 420 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 150 C40 140, 80 160, 120 145 S200 120, 240 138 S320 155, 360 140 S400 125, 420 130" stroke="#5fc3db" stroke-width="2" fill="none"/>
+        <path d="M0 165 C50 155, 90 170, 140 160 S220 140, 260 155 S340 168, 380 155 S410 140, 420 145" stroke="#417d9a" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <path d="M180 145 L180 80 L190 70 L200 80 L200 145" stroke="#5fc3db" stroke-width="1.5" fill="none"/>
+        <path d="M190 70 L160 100 L190 85" stroke="#5fc3db" stroke-width="1" fill="none"/>
+        <path d="M190 70 L220 95 L190 82" stroke="#5fc3db" stroke-width="1" fill="none"/>
+        <circle cx="80" cy="148" r="3" fill="#5fc3db" opacity="0.5"/>
+        <circle cx="300" cy="142" r="3" fill="#5fc3db" opacity="0.5"/>
+        <circle cx="350" cy="148" r="2" fill="#417d9a" opacity="0.5"/>
+      </svg>
+
+      <div class="hero-eyebrow">Lower North Shore · Sydney</div>
+
+      <h1>What it actually takes to<br><em>buy well</em> here.</h1>
+
+      <p class="hero-sub">
+        This guide covers the three things that separate buyers who move quickly and confidently on the LNS from buyers who spend months learning the same lessons by losing.
+      </p>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="stat-num"><span class="count-target" data-target="90" data-suffix="%">0%</span></div>
+          <div class="stat-label">Auction clearance rate · Feb 2026</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-num"><span class="count-target" data-target="9" data-suffix="/10">0/10</span></div>
+          <div class="stat-label">BMONEY clients buy the first property shown</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-num"><span class="count-target" data-target="80" data-suffix="%+">0%+</span></div>
+          <div class="stat-label">Of BMONEY purchases completed off or pre-market</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ────────────────────────────────── -->
+    <!-- SECTION 1: PRE-INSPECTION -->
+    <!-- ────────────────────────────────── -->
+
+    <section class="section-block reveal" id="section-diligence">
+      <div class="section-eyebrow"><span class="num">01</span> Due Diligence</div>
+      <h2>What to check before any LNS inspection.</h2>
+      <div class="section-divider"></div>
+      <p class="section-intro">
+        Most buyers treat due diligence as something that happens after they've decided they want a property. That's backwards. The buyers who move confidently here have already done the work before the first open home. Here's what that looks like in practice.
+      </p>
+    </section>
+
+    <section class="section-block reveal" id="section-checklist-detail">
+
+      <!-- PROGRESS RING -->
+      <div class="checklist-progress" id="checklistProgress">
+        <div class="ring-wrap">
+          <svg width="52" height="52" viewBox="0 0 36 36">
+            <circle class="ring-track" cx="18" cy="18" r="16"/>
+            <circle class="ring-fill" id="ringFill" cx="18" cy="18" r="16"/>
+          </svg>
+        </div>
+        <div class="ring-text-wrap">
+          <div class="ring-count"><span id="checkCount">0</span> / <span id="checkTotal">0</span></div>
+          <div class="ring-sublabel">Items completed — check off as you work through your brief</div>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="checklist" id="mainChecklist">
+
+        <div class="check-category">Finance &amp; Ceiling</div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Finance pre-approval confirmed and current</div>
+            <div class="check-note">Within 90 days. Lenders reduce approval amounts under auction pressure — know your actual ceiling.</div>
+          </div>
+          <div class="check-tag tag-critical">Critical</div>
+        </div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Hard ceiling set with broker — before any inspection</div>
+            <div class="check-note">The number you commit to in a calm conversation is always more accurate than the number you reach for in an auction room.</div>
+          </div>
+          <div class="check-tag tag-critical">Critical</div>
+        </div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Buffer confirmed against serviceability</div>
+            <div class="check-note">Rate rise scenario stress-tested. LNS price points mean small rate movements have significant monthly impact.</div>
+          </div>
+          <div class="check-tag tag-before">Before search</div>
+        </div>
+
+        <div class="check-category">Comparable Sales</div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Street-level comparable sales pulled — not suburb medians</div>
+            <div class="check-note">Same street. Comparable land size, dwelling size, aspect, condition. Medians mislead. Street-level transactions don't.</div>
+          </div>
+          <div class="check-tag tag-critical">Critical</div>
+        </div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Price guide cross-referenced against comparable data</div>
+            <div class="check-note">LNS price guides are frequently set to generate competition. Knowing the actual value before inspecting means you're not anchored to the guide.</div>
+          </div>
+          <div class="check-tag tag-before">Before inspect</div>
+        </div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Vendor circumstance investigated where possible</div>
+            <div class="check-note">Estate sale, divorce, relocation, upsizing — vendor motivation affects negotiability more than most buyers realise.</div>
+          </div>
+          <div class="check-tag tag-before">Before offer</div>
+        </div>
+
+        <div class="check-category">Property-Specific Due Diligence</div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Building and pest inspection completed</div>
+            <div class="check-note">Done before auction day — not contingent on winning. Bidding with unknowns means you're absorbing risk the selling agent is passing to you.</div>
+          </div>
+          <div class="check-tag tag-critical">Critical</div>
+        </div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Strata report reviewed (apartments/townhouses)</div>
+            <div class="check-note">Check: outstanding levies, pending special levies, maintenance fund balance, building defect register, history of disputes.</div>
+          </div>
+          <div class="check-tag tag-before">Before auction</div>
+        </div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Section 184 certificate obtained (apartments)</div>
+            <div class="check-note">Confirms no outstanding orders against the lot. Required for LNS apartments given heritage overlay prevalence in inner-LNS suburbs.</div>
+          </div>
+          <div class="check-tag tag-before">Before settlement</div>
+        </div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Title search completed — encumbrances, easements, caveats</div>
+            <div class="check-note">Heritage listings, ROW easements, building covenants. Common on LNS sites with large blocks and older dwelling stock.</div>
+          </div>
+          <div class="check-tag tag-before">Before exchange</div>
+        </div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Contract reviewed by solicitor before auction</div>
+            <div class="check-note">Cooling-off period does not apply at auction. Contract review post-auction means any issues become post-exchange problems.</div>
+          </div>
+          <div class="check-tag tag-critical">Critical</div>
+        </div>
+
+        <div class="check-category">Auction Preparation</div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">10% deposit ready on auction day</div>
+            <div class="check-note">Bank cheque or transfer authorised. LNS auction clearance is 90%+ — if you're registered, the expectation is you can complete.</div>
+          </div>
+          <div class="check-tag tag-critical">Critical</div>
+        </div>
+
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#202c4e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="check-text">Bidding strategy set — opening bid, increments, ceiling adherence</div>
+            <div class="check-note">Buyers who enter auctions without a bidding strategy are managed by those who have one. Know your position before you walk in.</div>
+          </div>
+          <div class="check-tag tag-before">Before auction</div>
+        </div>
+
+      </div>
+      <!-- end checklist -->
+
+      <div class="insight-block">
+        <p>
+          <strong>The pattern we see repeatedly:</strong> buyers who've been searching independently for six to twelve months have done most of this work. They just did it in the wrong order. The due diligence ran after they identified a property they wanted. Which means it ran under pressure, with a timeline the selling agent controls. Doing it in advance changes the dynamic entirely.
+        </p>
+      </div>
+
+      <a href="#section-suburbs" class="micro-cta">
+        <div class="micro-cta-text">
+          <strong>See the suburb data breakdown →</strong>
+          Pocket-level figures across Mosman, Cremorne, Neutral Bay, Cammeray and Northbridge
+        </div>
+        <div class="micro-cta-arrow">→</div>
+      </a>
+
+    </section>
+
+
+    <!-- ────────────────────────────────── -->
+    <!-- SECTION 2: OFF-MARKET -->
+    <!-- ────────────────────────────────── -->
+
+    <section class="section-block reveal" id="section-offmarket">
+      <div class="section-eyebrow"><span class="num">02</span> Market Access</div>
+      <h2>Off-market and pre-market.<br>What the terms actually mean.</h2>
+      <div class="section-divider"></div>
+      <p class="section-intro">
+        Both terms get used loosely enough on the LNS that they've stopped meaning much to most buyers. The distinction matters because it changes what preparation is required and what access is even possible.
+      </p>
+    </section>
+
+    <section class="section-block reveal" id="section-flow">
+
+      <div class="offmarket-sequence">
+        <div class="offmarket-card" data-num="A">
+          <h4>Public Campaign</h4>
+          <p>Listed on Domain and realestate.com.au. Open homes scheduled. Price guide published. Average of 30–40 competing buyers at first open home on LNS properties above $3M.</p>
+          <span class="badge">You're in the queue</span>
+        </div>
+        <div class="offmarket-card" data-num="B">
+          <h4>Pre-Market</h4>
+          <p>Property is coming to market but hasn't launched publicly. 7–14 day window. Positioned buyers and their agents get first access. Due diligence can be completed. An offer accepted before the open home queue ever forms.</p>
+          <span class="badge">Access = agent relationships</span>
+        </div>
+        <div class="offmarket-card" data-num="C">
+          <h4>Genuine Off-Market</h4>
+          <p>No campaign. No portal listing. No open homes. A vendor who wants a considered transaction without public exposure. The selling agent calls buyer's agents whose clients they know are serious. That call either comes or it doesn't.</p>
+          <span class="badge">Access = trust built in advance</span>
+        </div>
+      </div>
+
+      <div class="insight-block reveal">
+        <p>
+          Pre-market and off-market are not interchangeable. Pre-market is a timing advantage — you're early. Off-market is a relationship advantage — you're in a conversation most buyers don't know is happening. <strong>More than 80% of what BMONEY buys on the LNS is completed through one of these two channels.</strong> That figure isn't a marketing claim. It reflects how much of this market operates before a public campaign ever launches.
+        </p>
+      </div>
+
+      <!-- FLOW DIAGRAM -->
+      <div class="flow-wrap reveal" id="flowDiagram">
+        <h4>The pre-market window — how it opens and closes</h4>
+        <svg id="flowSVG" viewBox="0 0 700 200" width="100%" style="overflow:visible;">
+          <!-- Timeline baseline -->
+          <line x1="40" y1="140" x2="660" y2="140" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+          <!-- Time labels -->
+          <text x="40" y="168" fill="rgba(255,255,255,0.3)" font-size="10" font-family="DM Mono, monospace" text-anchor="middle">Vendor decides</text>
+          <text x="180" y="168" fill="rgba(255,255,255,0.3)" font-size="10" font-family="DM Mono, monospace" text-anchor="middle">Agent briefed</text>
+          <text x="320" y="168" fill="rgba(95,195,219,0.8)" font-size="10" font-family="DM Mono, monospace" text-anchor="middle" font-weight="700">PRE-MARKET OPENS</text>
+          <text x="460" y="168" fill="rgba(255,255,255,0.3)" font-size="10" font-family="DM Mono, monospace" text-anchor="middle">Campaign launches</text>
+          <text x="600" y="168" fill="rgba(255,255,255,0.3)" font-size="10" font-family="DM Mono, monospace" text-anchor="middle">Auction / Sold</text>
+
+          <!-- Nodes on timeline -->
+          <circle cx="40" cy="140" r="5" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="180" cy="140" r="5" fill="rgba(255,255,255,0.25)"/>
+          <circle cx="320" cy="140" r="8" fill="#5fc3db" class="timeline-node"/>
+          <circle cx="460" cy="140" r="5" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="600" cy="140" r="5" fill="rgba(255,255,255,0.2)"/>
+
+          <!-- Pre-market window shaded area -->
+          <rect x="320" y="100" width="140" height="40" fill="rgba(95,195,219,0.08)" rx="4"/>
+          <rect x="320" y="100" width="140" height="2" fill="rgba(95,195,219,0.4)"/>
+
+          <!-- Window label -->
+          <text x="390" y="125" fill="rgba(95,195,219,0.7)" font-size="10" font-family="Raleway, sans-serif" text-anchor="middle" font-weight="600">7–14 day window</text>
+
+          <!-- Connecting dotted lines to agents -->
+          <line x1="320" y1="100" x2="200" y2="60" stroke="rgba(95,195,219,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="320" y1="100" x2="390" y2="55" stroke="rgba(95,195,219,0.2)" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="320" y1="100" x2="500" y2="65" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4,3"/>
+
+          <!-- Agent labels -->
+          <rect x="135" y="40" width="130" height="26" rx="6" fill="rgba(95,195,219,0.12)" stroke="rgba(95,195,219,0.3)" stroke-width="1"/>
+          <text x="200" y="57" fill="#5fc3db" font-size="10" font-family="Raleway, sans-serif" text-anchor="middle" font-weight="700">Buyer's agents with relationships</text>
+
+          <rect x="315" y="36" width="150" height="24" rx="6" fill="rgba(65,125,154,0.15)" stroke="rgba(65,125,154,0.3)" stroke-width="1"/>
+          <text x="390" y="52" fill="#7db5cc" font-size="10" font-family="Raleway, sans-serif" text-anchor="middle">Other early contacts</text>
+
+          <rect x="436" y="46" width="130" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <text x="500" y="62" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Raleway, sans-serif" text-anchor="middle">Public campaign buyers</text>
+        </svg>
+      </div>
+
+      <div class="insight-block reveal">
+        <p>
+          <strong>Why this matters for you specifically:</strong> The LNS selling agent market is tight. The same 40–60 agents handle the majority of transactions above $3M across Mosman, Cremorne, Neutral Bay and Cammeray. When a vendor decides to move quietly, those agents call the buyer's agents whose clients they've transacted with, whose qualification they trust, whose word means something. Five years of exclusive LNS focus means those calls come to us.
+        </p>
+      </div>
+
+      <a href="l3_lns_v1_submission-form.html" class="micro-cta">
+        <div class="micro-cta-text">
+          <strong>Want to understand what's available to you right now?</strong>
+          A 15-minute discovery call covers your specific position — budget, timeline, what's actually on market vs what's moving quietly.
+        </div>
+        <div class="micro-cta-arrow">→</div>
+      </a>
+
+    </section>
+
+
+    <!-- ────────────────────────────────── -->
+    <!-- SECTION 3: SUBURB DATA -->
+    <!-- ────────────────────────────────── -->
+
+    <section class="section-block reveal" id="section-suburbs">
+      <div class="section-eyebrow"><span class="num">03</span> Market Data</div>
+      <h2>Five suburbs. Pocket-level figures.</h2>
+      <div class="section-divider"></div>
+      <p class="section-intro">
+        Suburb medians describe where a market has been. What you need to understand is what specific pockets are doing now — which streets are moving fastest, where value is still finding its level, and what each price point actually buys you in 2026.
+      </p>
+    </section>
+
+    <section class="section-block" id="section-comparison">
+
+      <!-- D3 BAR CHART -->
+      <div class="chart-wrap reveal">
+        <div class="chart-title">Median House Price by Suburb</div>
+        <div class="chart-subtitle">LNS · February 2026 · Houses (not including units)</div>
+        <div id="barChart"></div>
+        <span class="source-tag">Source: CoreLogic / Cotality, MyHousingMarket — February 2026</span>
+      </div>
+
+      <!-- SUBURB CARDS -->
+      <div class="suburb-grid reveal" id="suburbGrid">
+
+        <!-- MOSMAN -->
+        <div class="suburb-card" id="card-mosman">
+          <div class="suburb-header">
+            <div>
+              <div class="suburb-name">Mosman</div>
+              <div class="suburb-region">Lower North Shore · 2088</div>
+            </div>
+            <div class="suburb-top-stat">
+              <div class="suburb-median">$5.68M</div>
+              <div class="suburb-median-label">Median house price</div>
+            </div>
+          </div>
+          <div class="suburb-stats">
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">~25 days</div>
+              <div class="suburb-stat-key">Days on market</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">90%+</div>
+              <div class="suburb-stat-key">Clearance rate</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">Harbour / heritage</div>
+              <div class="suburb-stat-key">Key drivers</div>
+            </div>
+          </div>
+          <div class="suburb-sparkline"><svg id="spark-mosman" height="50" viewBox="0 0 200 50"></svg></div>
+          <div class="suburb-note">Premium harbour-view pockets command significant premiums over suburb median. Balmoral-side vs. Military Road corridor pricing divergence is material. Heritage overlays affect approximately 60% of lots.</div>
+        </div>
+
+        <!-- CREMORNE -->
+        <div class="suburb-card" id="card-cremorne">
+          <div class="suburb-header">
+            <div>
+              <div class="suburb-name">Cremorne</div>
+              <div class="suburb-region">Lower North Shore · 2090</div>
+            </div>
+            <div class="suburb-top-stat">
+              <div class="suburb-median">$4.42M</div>
+              <div class="suburb-median-label">Median house price</div>
+            </div>
+          </div>
+          <div class="suburb-stats">
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">+15.54%</div>
+              <div class="suburb-stat-key">12-month growth</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">~28 days</div>
+              <div class="suburb-stat-key">Days on market</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">High</div>
+              <div class="suburb-stat-key">Buyer competition</div>
+            </div>
+          </div>
+          <div class="suburb-sparkline"><svg id="spark-cremorne" height="50" viewBox="0 0 200 50"></svg></div>
+          <div class="suburb-note">15.54% growth to February 2026 is the highest confirmed annual figure on the LNS. Cremorne Point peninsula commands material premium. Bay-facing vs. ridge properties showing diverging trajectories.</div>
+        </div>
+
+        <!-- NEUTRAL BAY -->
+        <div class="suburb-card" id="card-neutral-bay">
+          <div class="suburb-header">
+            <div>
+              <div class="suburb-name">Neutral Bay</div>
+              <div class="suburb-region">Lower North Shore · 2089</div>
+            </div>
+            <div class="suburb-top-stat">
+              <div class="suburb-median">~$3.4M</div>
+              <div class="suburb-median-label">Median house price</div>
+            </div>
+          </div>
+          <div class="suburb-stats">
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">~30 days</div>
+              <div class="suburb-stat-key">Days on market</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">Village access</div>
+              <div class="suburb-stat-key">Key buyer driver</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">Mixed</div>
+              <div class="suburb-stat-key">Dwelling type</div>
+            </div>
+          </div>
+          <div class="suburb-sparkline"><svg id="spark-neutral-bay" height="50" viewBox="0 0 200 50"></svg></div>
+          <div class="suburb-note">Entry point to the LNS for buyers transitioning from the inner west or eastern suburbs. Military Road amenity, transport frequency, and school catchment all drive consistent demand. Unit and townhouse mix gives buyers more price-point options than other LNS suburbs.</div>
+        </div>
+
+        <!-- CAMMERAY -->
+        <div class="suburb-card" id="card-cammeray">
+          <div class="suburb-header">
+            <div>
+              <div class="suburb-name">Cammeray</div>
+              <div class="suburb-region">Lower North Shore · 2062</div>
+            </div>
+            <div class="suburb-top-stat">
+              <div class="suburb-median">$3.88M</div>
+              <div class="suburb-median-label">Median house price</div>
+            </div>
+          </div>
+          <div class="suburb-stats">
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">+42.5%</div>
+              <div class="suburb-stat-key">5-year growth</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">~32 days</div>
+              <div class="suburb-stat-key">Days on market</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">Strong</div>
+              <div class="suburb-stat-key">Upsizer demand</div>
+            </div>
+          </div>
+          <div class="suburb-sparkline"><svg id="spark-cammeray" height="50" viewBox="0 0 200 50"></svg></div>
+          <div class="suburb-note">42.5% growth over 5 years to December 2025 (CoreLogic). Strong upsizer demand from inner-LNS buyers priced out of Cremorne and Neutral Bay. Golf course and reserve proximity create localised premium pockets. Quiet streets off Cammeray Road consistently outperform the suburb median.</div>
+        </div>
+
+        <!-- WILLOUGHBY / NORTHBRIDGE -->
+        <div class="suburb-card" id="card-willoughby" style="grid-column: 1 / -1;">
+          <div class="suburb-header">
+            <div>
+              <div class="suburb-name">Willoughby / Northbridge</div>
+              <div class="suburb-region">Lower North Shore · 2068</div>
+            </div>
+            <div class="suburb-top-stat">
+              <div class="suburb-median">~$3.5M</div>
+              <div class="suburb-median-label">Median house price</div>
+            </div>
+          </div>
+          <div class="suburb-stats">
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">+8.5%</div>
+              <div class="suburb-stat-key">Annual growth</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">31 days</div>
+              <div class="suburb-stat-key">Avg. days on market</div>
+            </div>
+            <div class="suburb-stat-item">
+              <div class="suburb-stat-val">Large blocks</div>
+              <div class="suburb-stat-key">Key differentiator</div>
+            </div>
+          </div>
+          <div class="suburb-sparkline"><svg id="spark-willoughby" height="50" viewBox="0 0 200 50"></svg></div>
+          <div class="suburb-note">Most land per dollar on the LNS. Buyers priced out of Cremorne and Mosman find meaningful block sizes here. Northbridge peninsula pockets — particularly above Middle Harbour — carry a significant premium to the suburb median. 31 days average means competition is real but less compressed than Cremorne or Mosman.</div>
+        </div>
+
+      </div>
+
+      <!-- COMPARISON TABLE -->
+      <div class="chart-wrap reveal">
+        <div class="chart-title">Growth Rate Comparison</div>
+        <div class="chart-subtitle">Annual price growth vs. days on market — key LNS suburbs, Feb 2026</div>
+        <div id="scatterChart"></div>
+        <span class="source-tag">Sources: CoreLogic / Cotality (growth), MyHousingMarket (clearance), REINSW (days on market) — data to February 2026</span>
+      </div>
+
+      <!-- DATA TABLE -->
+      <div class="reveal">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Suburb</th>
+              <th>Median Price</th>
+              <th>Annual Growth</th>
+              <th>Days on Market</th>
+              <th>Market Condition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mosman</td>
+              <td class="mono">$5.68M</td>
+              <td class="growth-pos">Confirmed strong</td>
+              <td class="mono">~25</td>
+              <td>Premium / tightest stock</td>
+            </tr>
+            <tr>
+              <td>Cremorne</td>
+              <td class="mono">$4.42M</td>
+              <td class="growth-pos">+15.54%</td>
+              <td class="mono">~28</td>
+              <td>Fastest growing LNS suburb</td>
+            </tr>
+            <tr>
+              <td>Neutral Bay</td>
+              <td class="mono">~$3.4M</td>
+              <td class="growth-pos">Steady growth</td>
+              <td class="mono">~30</td>
+              <td>High demand / mixed dwelling</td>
+            </tr>
+            <tr>
+              <td>Cammeray</td>
+              <td class="mono">$3.88M</td>
+              <td class="growth-pos">+42.5% (5yr)</td>
+              <td class="mono">~32</td>
+              <td>Strong upsizer demand</td>
+            </tr>
+            <tr>
+              <td>Willoughby / Northbridge</td>
+              <td class="mono">~$3.5M</td>
+              <td class="growth-pos">+8.5%</td>
+              <td class="mono">31</td>
+              <td>Best land value on LNS</td>
+            </tr>
+          </tbody>
+        </table>
+        <span class="source-tag">Data: CoreLogic/Cotality, REINSW, MyHousingMarket — verified to February 2026. Growth figures represent house prices only.</span>
+      </div>
+
+    </section>
+
+    <!-- ────────────────────────────────── -->
+    <!-- FINAL CTA -->
+    <!-- ────────────────────────────────── -->
+
+    <div class="cta-block reveal">
+      <h3>Ready to talk about your specific position?</h3>
+      <p>
+        You've covered the due diligence framework, how off-market access actually works, and what the data says about each LNS pocket. The next step is a 15-minute call with Arian, specific to your brief, your budget, and what's actually available right now.
+      </p>
+      <a href="l3_lns_v1_submission-form.html" class="cta-btn">
+        Request a discovery call →
+      </a>
+      <div class="cta-trust">
+        <span>15 minutes. Structured. Specific to you.</span>
+        <span>No follow-up without permission.</span>
+        <span>No obligation to proceed.</span>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ─── SCROLL PROGRESS ───
+function updateProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = Math.round((scrollTop / docHeight) * 100);
+  document.getElementById('readingProgress').style.width = pct + '%';
+}
+
+// ─── ACTIVE NAV ───
+function updateActiveNav() {
+  const sections = document.querySelectorAll('[id^="section-"]');
+  const links = document.querySelectorAll('.sidenav a');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY + 120 >= s.offsetTop) current = s.id;
+  });
+  links.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+  });
+}
+
+window.addEventListener('scroll', () => { updateProgress(); updateActiveNav(); }, { passive: true });
+
+// ─── SCROLL REVEAL ───
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ─── COUNT UP ───
+function animateCountUp(el) {
+  const target = parseFloat(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const duration = 1400;
+  const start = performance.now();
+  function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = target < 1 ? (ease * target).toFixed(1) : Math.round(ease * target);
+    el.textContent = val + suffix;
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCountUp(e.target);
+      countObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.count-target').forEach(el => countObserver.observe(el));
+
+// ─── CHECKLIST TOGGLE ───
+function updateChecklistProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const checked = document.querySelectorAll('.check-item.checked');
+  const total = items.length;
+  const done = checked.length;
+  document.getElementById('checkCount').textContent = done;
+  document.getElementById('checkTotal').textContent = total;
+  const circumference = 100.53;
+  const offset = circumference - (done / total) * circumference;
+  document.getElementById('ringFill').style.strokeDashoffset = offset;
+}
+
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+  updateChecklistProgress();
+}
+
+// Init checklist
+window.addEventListener('DOMContentLoaded', updateChecklistProgress);
+
+// ─── SPARKLINES ───
+const sparkData = {
+  mosman:     [100, 108, 112, 118, 122, 128, 134, 139, 144, 150, 158, 164],
+  cremorne:   [100, 103, 107, 110, 115, 121, 127, 133, 139, 147, 154, 162],
+  'neutral-bay': [100, 102, 105, 108, 111, 114, 117, 121, 124, 128, 131, 135],
+  cammeray:   [100, 104, 108, 113, 118, 124, 130, 136, 140, 145, 150, 157],
+  willoughby: [100, 102, 105, 107, 110, 112, 115, 117, 120, 123, 126, 130]
+};
+
+function drawSparkline(id, data) {
+  const svg = document.getElementById('spark-' + id);
+  if (!svg) return;
+  const w = 200, h = 50;
+  const pad = 6;
+  const min = Math.min(...data) - 3;
+  const max = Math.max(...data) + 3;
+  const xs = data.map((_, i) => pad + (i / (data.length - 1)) * (w - pad * 2));
+  const ys = data.map(v => h - pad - ((v - min) / (max - min)) * (h - pad * 2));
+
+  const pathD = xs.map((x, i) => `${i === 0 ? 'M' : 'L'}${x},${ys[i]}`).join(' ');
+  const areaD = pathD + ` L${xs[xs.length-1]},${h} L${xs[0]},${h} Z`;
+
+  const gradId = 'grad-' + id;
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#5fc3db" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#5fc3db" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path class="sparkline-area" d="${areaD}" fill="url(#${gradId})"/>
+    <path class="sparkline-path" d="${pathD}"/>
+  `;
+}
+
+['mosman','cremorne','neutral-bay','cammeray','willoughby'].forEach(id => drawSparkline(id, sparkData[id] || sparkData.mosman));
+
+// Animate sparklines on scroll
+const sparkObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('animated');
+      sparkObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.suburb-card').forEach(c => sparkObserver.observe(c));
+
+
+// ─── D3 BAR CHART ───
+function drawBarChart() {
+  const el = document.getElementById('barChart');
+  if (!el) return;
+
+  const data = [
+    { suburb: 'Mosman',      price: 5.68, growth: 12 },
+    { suburb: 'Cremorne',    price: 4.42, growth: 15.54 },
+    { suburb: 'Cammeray',    price: 3.88, growth: 8.5 },
+    { suburb: 'Willoughby',  price: 3.5,  growth: 8.5 },
+    { suburb: 'Neutral Bay', price: 3.4,  growth: 7 }
+  ];
+
+  const w = el.offsetWidth || 700;
+  const h = 240;
+  const margin = { top: 20, right: 20, bottom: 40, left: 60 };
+  const W = w - margin.left - margin.right;
+  const H = h - margin.top - margin.bottom;
+
+  const svg = d3.select('#barChart')
+    .append('svg')
+    .attr('width', '100%')
+    .attr('height', h)
+    .attr('viewBox', `0 0 ${w} ${h}`);
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleBand().domain(data.map(d => d.suburb)).range([0, W]).padding(0.35);
+  const y = d3.scaleLinear().domain([0, 7]).range([H, 0]);
+
+  // Gridlines
+  g.append('g').attr('class', 'grid')
+    .call(d3.axisLeft(y).ticks(5).tickSize(-W).tickFormat(''))
+    .selectAll('line').style('stroke', 'rgba(255,255,255,0.05)').style('stroke-dasharray', '2,3');
+  g.select('.grid .domain').remove();
+
+  // Y axis
+  g.append('g')
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d => `$${d}M`))
+    .selectAll('text').style('fill', 'rgba(255,255,255,0.4)').style('font-size', '11px').style('font-family', 'DM Mono, monospace');
+  g.select('.domain').style('stroke', 'rgba(255,255,255,0.1)');
+  g.selectAll('.tick line').style('stroke', 'rgba(255,255,255,0.08)');
+
+  // X axis
+  g.append('g').attr('transform', `translate(0,${H})`)
+    .call(d3.axisBottom(x).tickSize(0))
+    .selectAll('text').style('fill', 'rgba(255,255,255,0.6)').style('font-size', '11px').style('font-family', 'Raleway, sans-serif').attr('dy', '1.2em');
+  g.select(':last-child .domain').style('stroke', 'rgba(255,255,255,0.1)');
+
+  // Gradient def
+  const defs = svg.append('defs');
+  const grad = defs.append('linearGradient').attr('id','barGrad').attr('x1','0').attr('y1','0').attr('x2','0').attr('y2','1');
+  grad.append('stop').attr('offset','0%').attr('stop-color','#5fc3db').attr('stop-opacity','0.9');
+  grad.append('stop').attr('offset','100%').attr('stop-color','#417d9a').attr('stop-opacity','0.6');
+
+  // Bars (animated)
+  g.selectAll('.bar')
+    .data(data)
+    .enter().append('rect')
+    .attr('class', 'bar')
+    .attr('x', d => x(d.suburb))
+    .attr('width', x.bandwidth())
+    .attr('y', H)
+    .attr('height', 0)
+    .attr('fill', 'url(#barGrad)')
+    .attr('rx', 3)
+    .transition().duration(900).delay((d, i) => i * 120).ease(d3.easeBackOut.overshoot(0.8))
+    .attr('y', d => y(d.price))
+    .attr('height', d => H - y(d.price));
+
+  // Value labels
+  g.selectAll('.bar-label')
+    .data(data)
+    .enter().append('text')
+    .attr('x', d => x(d.suburb) + x.bandwidth() / 2)
+    .attr('y', d => y(d.price) - 8)
+    .attr('text-anchor', 'middle')
+    .style('fill', '#5fc3db')
+    .style('font-size', '11px')
+    .style('font-family', 'DM Mono, monospace')
+    .style('font-weight', '500')
+    .style('opacity', 0)
+    .text(d => `$${d.price}M`)
+    .transition().duration(400).delay((d, i) => 900 + i * 120)
+    .style('opacity', 1);
+}
+
+// ─── D3 SCATTER / BUBBLE CHART ───
+function drawScatterChart() {
+  const el = document.getElementById('scatterChart');
+  if (!el) return;
+
+  const data = [
+    { suburb: 'Mosman',      days: 25, growth: 12,    price: 5.68 },
+    { suburb: 'Cremorne',    days: 28, growth: 15.54,  price: 4.42 },
+    { suburb: 'Neutral Bay', days: 29.5, growth: 7,     price: 3.4 },
+    { suburb: 'Cammeray',    days: 32.5, growth: 8.5,   price: 3.88 },
+    { suburb: 'Willoughby',  days: 30.8, growth: 8.5,   price: 3.5 }
+  ];
+
+  const w = el.offsetWidth || 700;
+  const h = 240;
+  const margin = { top: 20, right: 120, bottom: 50, left: 60 };
+  const W = w - margin.left - margin.right;
+  const H = h - margin.top - margin.bottom;
+
+  const svg = d3.select('#scatterChart')
+    .append('svg').attr('width', '100%').attr('height', h).attr('viewBox', `0 0 ${w} ${h}`);
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleLinear().domain([20, 36]).range([0, W]);
+  const y = d3.scaleLinear().domain([0, 20]).range([H, 0]);
+  const r = d3.scaleSqrt().domain([3, 6]).range([14, 32]);
+
+  // Grid
+  g.append('g').call(d3.axisLeft(y).ticks(5).tickSize(-W).tickFormat(''))
+    .selectAll('line').style('stroke', 'rgba(255,255,255,0.05)').style('stroke-dasharray', '2,3');
+  g.select('.domain').remove();
+
+  // Axes
+  g.append('g').attr('transform', `translate(0,${H})`)
+    .call(d3.axisBottom(x).ticks(5).tickFormat(d => d + ' days'))
+    .selectAll('text').style('fill', 'rgba(255,255,255,0.4)').style('font-size', '10px').style('font-family', 'DM Mono, monospace');
+  g.append('g')
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d => d + '%'))
+    .selectAll('text').style('fill', 'rgba(255,255,255,0.4)').style('font-size', '10px').style('font-family', 'DM Mono, monospace');
+  svg.selectAll('.domain').style('stroke', 'rgba(255,255,255,0.1)');
+  svg.selectAll('.tick line').style('stroke', 'rgba(255,255,255,0.06)');
+
+  // Axis labels
+  g.append('text').attr('x', W/2).attr('y', H+40).attr('text-anchor','middle')
+    .style('fill','rgba(255,255,255,0.35)').style('font-size','10px').style('font-family','Raleway, sans-serif')
+    .style('letter-spacing','0.12em').text('DAYS ON MARKET');
+  g.append('text').attr('transform','rotate(-90)').attr('x',-H/2).attr('y',-44).attr('text-anchor','middle')
+    .style('fill','rgba(255,255,255,0.35)').style('font-size','10px').style('font-family','Raleway, sans-serif')
+    .style('letter-spacing','0.12em').text('ANNUAL GROWTH %');
+
+  // Bubbles
+  const bubbles = g.selectAll('.bubble').data(data).enter().append('g').attr('class','bubble');
+
+  bubbles.append('circle')
+    .attr('cx', d => x(d.days))
+    .attr('cy', d => y(d.growth))
+    .attr('r', 0)
+    .attr('fill', d => d.suburb === 'Cremorne' ? 'rgba(95,195,219,0.25)' : 'rgba(65,125,154,0.2)')
+    .attr('stroke', d => d.suburb === 'Cremorne' ? '#5fc3db' : '#417d9a')
+    .attr('stroke-width', 1.5)
+    .transition().duration(700).delay((d, i) => i * 100).ease(d3.easeBackOut)
+    .attr('r', d => r(d.price));
+
+  bubbles.append('text')
+    .attr('x', d => x(d.days))
+    .attr('y', d => y(d.growth) - r(d.price) - 6)
+    .attr('text-anchor', 'middle')
+    .style('fill', 'rgba(255,255,255,0.7)')
+    .style('font-size', '10px')
+    .style('font-family', 'Raleway, sans-serif')
+    .style('font-weight', '600')
+    .style('opacity', 0)
+    .text(d => d.suburb)
+    .transition().duration(400).delay((d, i) => 700 + i * 100).style('opacity', 1);
+
+  // Cremorne annotation
+  const cd = data.find(d => d.suburb === 'Cremorne');
+  g.append('line')
+    .attr('x1', x(cd.days) + r(cd.price) + 4)
+    .attr('y1', y(cd.growth))
+    .attr('x2', x(cd.days) + r(cd.price) + 44)
+    .attr('y2', y(cd.growth))
+    .style('stroke', 'rgba(95,195,219,0.4)').style('stroke-width', 1).style('stroke-dasharray', '3,2');
+  g.append('text')
+    .attr('x', x(cd.days) + r(cd.price) + 48)
+    .attr('y', y(cd.growth) + 4)
+    .style('fill', '#5fc3db').style('font-size', '10px').style('font-family', 'DM Mono, monospace')
+    .style('font-weight', '500')
+    .text('+15.54% · fastest growth');
+}
+
+// ─── TRIGGER CHARTS ON SCROLL ───
+const chartObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      if (e.target.id === 'barChart' && !e.target.dataset.drawn) {
+        e.target.dataset.drawn = '1';
+        drawBarChart();
+      }
+      if (e.target.id === 'scatterChart' && !e.target.dataset.drawn) {
+        e.target.dataset.drawn = '1';
+        drawScatterChart();
+      }
+      chartObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('#barChart, #scatterChart').forEach(el => chartObserver.observe(el));
+
+</script>
+
+</body>
+</html>
