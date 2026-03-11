@@ -536,16 +536,26 @@
   }
 
   .offmarket-card .badge {
-    display: inline-block;
+    display: inline-flex;    /* Keeps the oval shape but allows centering */
+    align-items: center;     /* Centers text vertically */
+    justify-content: center;  /* Centers text horizontally */
+    text-align: center;      /* Centers multi-line text */
+    
     margin-top: 12px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 20px;
+    
+    /* Adjust these for the oval size */
+    padding: 8px 16px;       
+    border-radius: 50px;     /* Higher number ensures a pill shape */
+    
     border: 1px solid var(--border-strong);
     color: var(--sky);
+    
+    /* Optional: if you want a specific width */
+    min-width: 120px;
   }
 
   /* ─── FLOW DIAGRAM SVG ─── */
@@ -1068,11 +1078,11 @@
         </div>
         <div class="hero-stat">
           <div class="stat-num"><span class="count-target" data-target="9" data-suffix="/10">0/10</span></div>
-          <div class="stat-label">BMONEY clients buy the first property shown</div>
+          <div class="stat-label">BMONEY PROPERTY clients buy the first property shown</div>
         </div>
         <div class="hero-stat">
           <div class="stat-num"><span class="count-target" data-target="80" data-suffix="%+">0%+</span></div>
-          <div class="stat-label">Of BMONEY purchases completed off or pre-market</div>
+          <div class="stat-label">Of BMONEY PROPERTY purchases completed off or pre-market</div>
         </div>
       </div>
 
@@ -1290,7 +1300,7 @@
 
       <div class="insight-block reveal">
         <p>
-          Pre-market and off-market are not interchangeable. Pre-market is a timing advantage — you're early. Off-market is a relationship advantage — you're in a conversation most buyers don't know is happening. <strong>More than 80% of what BMONEY buys on the LNS is completed through one of these two channels.</strong> That figure isn't a marketing claim. It reflects how much of this market operates before a public campaign ever launches.
+          Pre-market and off-market are not interchangeable. Pre-market is a timing advantage — you're early. Off-market is a relationship advantage — you're in a conversation most buyers don't know is happening. <strong>More than 80% of what BMONEY PROPERTY buys on the LNS is completed through one of these two channels.</strong> That figure isn't a marketing claim. It reflects how much of this market operates before a public campaign ever launches.
         </p>
       </div>
 
@@ -1328,14 +1338,14 @@
           <line x1="320" y1="100" x2="500" y2="65" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4,3"/>
 
           <!-- Agent labels -->
-          <rect x="135" y="40" width="130" height="26" rx="6" fill="rgba(95,195,219,0.12)" stroke="rgba(95,195,219,0.3)" stroke-width="1"/>
-          <text x="200" y="57" fill="#5fc3db" font-size="10" font-family="Raleway, sans-serif" text-anchor="middle" font-weight="700">Buyer's agents with relationships</text>
+          <rect x="135" y="40" width="170" height="26" rx="6" fill="rgba(95,195,219,0.12)" stroke="rgba(95,195,219,0.3)" stroke-width="1"/>
+          <text x="220" y="57" fill="#5fc3db" font-size="10" font-family="Raleway, sans-serif" text-anchor="middle" font-weight="700">Buyer's agents with relationships</text>
 
           <rect x="315" y="36" width="150" height="24" rx="6" fill="rgba(65,125,154,0.15)" stroke="rgba(65,125,154,0.3)" stroke-width="1"/>
           <text x="390" y="52" fill="#7db5cc" font-size="10" font-family="Raleway, sans-serif" text-anchor="middle">Other early contacts</text>
 
-          <rect x="436" y="46" width="130" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-          <text x="500" y="62" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Raleway, sans-serif" text-anchor="middle">Public campaign buyers</text>
+          <rect x="500" y="60" width="130" height="24" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <text x="565" y="76" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Raleway, sans-serif" text-anchor="middle">Public campaign buyers</text>
         </svg>
       </div>
 
