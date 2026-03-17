@@ -455,7 +455,7 @@
     <p class="hero-desc">Seven situational questions. A private readiness snapshot built specifically for how the Lower North Shore market operates right now.</p>
     <div class="hero-meta">
       <div class="hero-meta-item"><span>&#9201;</span> 3 minutes</div>
-      <div class="hero-meta-item"><span>&#128274;</span> Private</div>
+      <div class="hero-meta-item"><span><i class="fas fa-lock"></i></span> Private</div>
       <div class="hero-meta-item"><span>300+</span> completed</div>
     </div>
   </div>
@@ -745,11 +745,14 @@
 
   <div class="screen" data-screen="email">
     <div class="email-wrap">
-      <div class="email-icon">&#128274;</div>
+      <div class="email-icon"><i class="fas fa-lock"></i></div>
       <div class="q-number">Almost there</div>
       <h2 class="q-text">Where should we send your results?</h2>
       <p class="q-helper">Your readiness breakdown and personalised insights, delivered privately. One email with your results, nothing further without your permission.</p>
       <div class="email-group">
+        <input type="text" class="email-input" id="firstNameIn" placeholder="First name">
+        <input type="text" class="email-input" id="lastNameIn" placeholder="Last name">
+        <input type="tel" class="email-input" id="phoneIn" placeholder="Phone number">
         <input type="email" class="email-input" id="emailIn" placeholder="Your email address">
         <button class="email-btn" id="emailBtn">Send My Results</button>
       </div>
@@ -847,8 +850,11 @@ document.querySelectorAll('.btn-next').forEach(btn => {
 });
 
 document.getElementById('emailBtn').addEventListener('click', () => {
-  const v = document.getElementById('emailIn').value;
-  if (v && v.includes('@')) showResults();
+  const fn = document.getElementById('firstNameIn').value.trim();
+  const ln = document.getElementById('lastNameIn').value.trim();
+  const ph = document.getElementById('phoneIn').value.trim();
+  const v = document.getElementById('emailIn').value.trim();
+  if (fn && ln && ph && v && v.includes('@')) showResults();
 });
 document.getElementById('emailIn').addEventListener('keypress', e => {
   if (e.key === 'Enter') document.getElementById('emailBtn').click();
